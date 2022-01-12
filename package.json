@@ -1,7 +1,7 @@
 {
-  "name": "worldebot",
+  "name": "nsbot",
   "version": "1.0.0",
-  "description": "Bot that solves Wordle",
+  "description": "The bot for everything NS",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -14,9 +14,9 @@
   "author": "Nicolas Ravasi",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nravasi/wordlebot/issues"
+    "url": "https://github.com/nravasi/nsbot/issues"
   },
-  "homepage": "https://github.com/nravasi/wordlebot#readme",
+  "homepage": "https://github.com/nravasi/nsbot#readme",
   "dependencies": {
     "axios": "^0.24.0",
     "discord.js": "^13.5.1",
