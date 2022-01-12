@@ -36,13 +36,13 @@ const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 //   file.end();
 // });
 
-
 client.on("ready", () => {
   // client.on("edfsfsgsg", () => {
   Promise.all([
     getFileAsArray("./res/initials.txt"),
     getFileAsArray("./res/words.txt"),
-    client.channels.fetch("798641314064236596"),
+    client.channels.fetch("798641314064236596"), //NS
+    // client.channels.fetch("930628066949095468"), //Playground
   ]).then((res) => {
     const [initials, words, channel] = res;
 
@@ -64,10 +64,16 @@ client.on("ready", () => {
       );
     }, delay);
 
+    solveAndSend(words, initials, channel);
 
-    client.on('message', message => { //this event is fired, whenever the bot sees a new message
-      if (message.isMemberMentioned(client.user && message.content.toLowerCase().includes("solve"))) { //we check, whether the bot is mentioned, client.user returns the user that the client is logged in as
-         solveAndSend(words, initials, channel)
+    client.on("message", (message) => {
+      //this event is fired, whenever the bot sees a new message
+      if (
+        message.mentions.has(client.user.id) &&
+        message.content.toLowerCase().includes("solve")
+      ) {
+        //we check, whether the bot is mentioned, client.user returns the user that the client is logged in as
+        solveAndSend(words, initials, channel);
       }
     });
     //"798641314064236596" // NS
@@ -107,12 +113,13 @@ function solveAndSend(words, initials, channel) {
   const [solved, result, attempts] = solve(initials, words, guesser);
 
   channel.send(
-    `${solved
-      ? "I was able to solve today's puzzle! 😀"
-      : "I wasn't able to solve today's puzzle 😥"} \n\n Wordle ${number} ${result.length}/6 \n\n${result.join(
-        "\n"
-      )}\n\nYou can find the words I tried below`
+    `${
+      solved
+        ? "I was able to solve today's puzzle! 😀"
+        : "I wasn't able to solve today's puzzle 😥"
+    } \n\n Wordle ${number} ${result.length}/6 \n\n${result.join(
+      "\n"
+    )}\n\nYou can find the words I tried below`
   );
   channel.send(`||${attempts.join("-")}||`);
 }
-

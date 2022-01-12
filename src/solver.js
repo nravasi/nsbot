@@ -33,12 +33,11 @@ const solve = (initials, dictionary, guesser) => {
     }
     solved = isSolved(conditions);
     tried++;
-
-    console.log(
+   /*  console.log(
       `Tried with ${word}, conditions are ${JSON.stringify(
         conditions
       )}, maxNum are ${JSON.stringify(maxNumberOfOcurrences)}`
-    );
+    ); */
   }
 
   let result = attempts.map(element => {
@@ -114,24 +113,6 @@ const getNewConditions = (word, result, conditions, maxNumberOfOcurrences) => {
   return [newConditions, newMaxes];
 };
 
-// const convertToOver = (conditions) => {
-//   let incorrects = conditions.filter((cond) => cond.type == MatchType.NO_MATCH);
-//   let exceeded = incorrects.filter((cond) =>
-//     conditions.includes(
-//       (newCond) =>
-//         newCond.letter == cond.letter &&
-//         (newCond.type == MatchType.CORRECT || newCond.type == MatchType.PARTIAL)
-//     )
-//   );
-
-//   return [
-//     ...conditions.filter((cond) => !exceeded.includes(cond)),
-//     exceeded.map((cond) => {
-//       cond.type = MatchType.OVERCOUNT;
-//       return cond;
-//     }),
-//   ];
-// };
 
 const createCondition = (letter, index, type) => {
   return { letter: letter, index: index, type: type };
