@@ -9,19 +9,11 @@ import { getSolutionForDate } from "./src/getSolution.js";
 import { config } from "dotenv";
 import { Client, Intents } from "discord.js";
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+});
 
 config();
-
-client.on("ready", () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-  //"798641314064236596" // NS
-
-
-  client.channels.fetch("930628066949095468").then(channel => {
-    channel.send("hollaaaaaa")
-  })
-});
 
 client.login(process.env.DISCORD_TOKEN);
 
@@ -30,6 +22,7 @@ const getFileAsArray = async (path) => {
   return data.toString().split("\n");
 };
 
+const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 // fs.readFile("./res/initials.txt", "utf-8", (err, data) => {
 //   const initials = data.split("\n");
 //   let filter = arr.filter(
@@ -43,27 +36,53 @@ const getFileAsArray = async (path) => {
 //   file.end();
 // });
 
-Promise.all([
-  getFileAsArray("./res/initials.txt"),
-  getFileAsArray("./res/words.txt"),
-]).then((res) => {
-  const [initials, words] = res;
-  //   console.log(`initials are ${initials.length}`)
-  //   console.log(`words are ${words.length}`)
-  // const todayWord = getSolutionForDate(new Date());
+client.on("ready", () => {
+  // client.on("edfsfsgsg", () => {
+  Promise.all([
+    getFileAsArray("./res/initials.txt"),
+    getFileAsArray("./res/words.txt"),
+    client.channels.fetch("930628066949095468"),
+  ]).then((res) => {
+    const [initials, words, channel] = res;
 
-  // console.log(`Solution is ${todayWord}`);
+    let date = new Date();
+    date.setUTCHours(0, 0, 0, 0);
+    date.setTime(date.getTime() + ONE_DAY_IN_MS);
 
-  // let guesser = new OfflineGuesser(todayWord);
-  // //   let guesser = new WordleGuesser()
+    console.log(date);
 
-  // shuffleArray(words);
-  // solve(initials, words, guesser);
-  // console.log(guesser.guess('brome'))
-  // console.log(guesser.guess('agggo'))
-  // console.log(guesser.guess('aggro'))
+    const delay = date - new Date().getTime();
+    console.log(delay);
+
+    setTimeout(() => {
+      setInterval(
+        (() => {
+          const [todayWord, number] = getSolutionForDate(new Date());
+          let guesser = new OfflineGuesser(todayWord);
+
+          shuffleArray(words);
+          const [solved, result, attempts] = solve(initials, words, guesser);
+
+          channel.send(
+            `${
+              solved
+                ? "I was able to solve today's puzzle! 😀"
+                : "I wasn't able to solve today's puzzle 😥"
+            } \n\n Wordle ${number} ${result.length}/6 \n\n${result.join(
+              "\n"
+            )}\n\nYou can find the words I tried below`
+          );
+          channel.send(`||${attempts.join("-")}||`);
+        })(),
+        ONE_DAY_IN_MS
+      );
+    }, delay);
+
+    //"798641314064236596" // NS
+    //   console.log(`initials are ${initials.length}`)
+    //   console.log(`words are ${words.length}`)
+  });
 });
-
 const getValueOfWord = (word) => {
   return word
     .split("")
