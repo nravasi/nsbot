@@ -55,17 +55,6 @@ client.on("ready", () => {
     const delay = date - new Date().getTime();
     console.log(delay);
 
-    setTimeout(() => {
-      setInterval(
-        (() => {
-          solveAndSend(words, initials, channel);
-        })(),
-        ONE_DAY_IN_MS
-      );
-    }, delay);
-
-    solveAndSend(words, initials, channel);
-
     client.on("message", (message) => {
       //this event is fired, whenever the bot sees a new message
       if (
