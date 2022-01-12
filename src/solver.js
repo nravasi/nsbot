@@ -41,17 +41,11 @@ const solve = (initials, dictionary, guesser) => {
     );
   }
 
-  if(solved){
-      console.log("I SOLVED IT")
-  } else{ 
-    console.log("BOOO FAILED")
-  }
-
-  console.log("logging attempts")
-  attempts.forEach(element => {
-    console.log(element.map(type => mapTypeToEmoji(type)).join(''))
+  let result = attempts.map(element => {
+    return element.map(type => mapTypeToEmoji(type)).join('')
   });
 
+  return [solved, result, triedWords]
 };
 
 const mapTypeToEmoji = (type) => {

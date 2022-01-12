@@ -8,7 +8,8 @@ var Os = new Date("2021-06-19T00:00:00");
 
 export const getSolutionForDate = (e) => {
         var s, a = Rs(Os, e);
-        return s = a % solutions.length, solutions[s]
+        s = a % solutions.length
+        return [ solutions[s], s]
 }
 
 
