@@ -1,0 +1,27 @@
+{
+  "name": "worldebot",
+  "version": "1.0.0",
+  "description": "Bot that solves Wordle",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nravasi/wordlebot.git"
+  },
+  "author": "Nicolas Ravasi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nravasi/wordlebot/issues"
+  },
+  "homepage": "https://github.com/nravasi/wordlebot#readme",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "discord.js": "^13.5.1",
+    "dotenv": "^11.0.0",
+    "lodash": "^4.17.21"
+  },
+  "type": "module"
+}
