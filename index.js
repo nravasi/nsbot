@@ -41,7 +41,7 @@ client.on("ready", () => {
   Promise.all([
     getFileAsArray("./res/initials.txt"),
     getFileAsArray("./res/words.txt"),
-    client.channels.fetch("930628066949095468"),
+    client.channels.fetch("798641314064236596"),
   ]).then((res) => {
     const [initials, words, channel] = res;
 
