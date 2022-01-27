@@ -148,12 +148,13 @@ export default solve;
 
 
 function getNextWord(dictionary, triedWords, conditions, maxNumberOfOcurrences) {
-    return dictionary.filter(
-        (w) => !triedWords.includes(w) &&
-            satisfiesAllConditions(w, conditions, maxNumberOfOcurrences)
-    ).sort((a, b) => {
-      return getValueOfWord(a, scrabbleValues) - getValueOfWord(b, scrabbleValues)
-    })[0];
+  const arr = dictionary.filter(
+    (w) => !triedWords.includes(w) &&
+      satisfiesAllConditions(w, conditions, maxNumberOfOcurrences)
+  ).sort((a, b) => {
+    return getValueOfWord(a, scrabbleValues) - getValueOfWord(b, scrabbleValues);
+  });
+    return arr[0];
 }
 
 //asuri, brome, deere, grype

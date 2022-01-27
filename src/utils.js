@@ -6,7 +6,11 @@ export const allIndexesOf = (char, string) => {
 };
 
 export const getValueOfWord = (word, scrabbleValues) => {
+  let temp = {}
   return word
     .split("")
-    .reduce((accum, letter) => accum + scrabbleValues[letter.toLowerCase()], 0);
+    .reduce((accum, letter) => {
+      let base = temp[letter] ? 2: 0
+      temp[letter] = true
+      return base + accum + scrabbleValues[letter.toLowerCase()]}, 0);
 };
