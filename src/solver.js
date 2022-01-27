@@ -1,6 +1,7 @@
 import { MatchType } from "./matchType.js";
-import { allIndexesOf } from "./utils.js";
+import { allIndexesOf, getValueOfWord } from "./utils.js";
 import  isEqual from "lodash/isEqual.js";
+import { scrabbleValues } from "./scrabble.js";
 
 const solve = (initials, dictionary, guesser) => {
   let initialWord = initials[Math.floor(Math.random() * initials.length)];
@@ -147,11 +148,14 @@ export default solve;
 
 
 function getNextWord(dictionary, triedWords, conditions, maxNumberOfOcurrences) {
-    return dictionary.find(
+    return dictionary.filter(
         (w) => !triedWords.includes(w) &&
             satisfiesAllConditions(w, conditions, maxNumberOfOcurrences)
-    );
+    ).sort((a, b) => {
+      return getValueOfWord(a, scrabbleValues) - getValueOfWord(b, scrabbleValues)
+    })[0];
 }
 
 //asuri, brome, deere, grype
+//slait-cymae-wonga-farro
 

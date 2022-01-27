@@ -5,6 +5,7 @@ import { scrabbleValues } from "./src/scrabble.js";
 import { OfflineGuesser } from "./src/guessers/OfflineGuesser.js";
 import solve from "./src/solver.js";
 import { getSolutionForDate } from "./src/getSolution.js";
+import { allIndexesOf, getValueOfWord } from "./src/utils.js";
 
 import { config } from "dotenv";
 import { Client, Intents } from "discord.js";
@@ -23,11 +24,11 @@ const getFileAsArray = async (path) => {
 };
 
 const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
-// fs.readFile("./res/initials.txt", "utf-8", (err, data) => {
+// fs.readFile("./res/words.txt", "utf-8", (err, data) => {
 //   const initials = data.split("\n");
-//   let filter = arr.filter(
+//   let filter = initials.filter(
 //     (word) =>
-//       getValueOfWord(word) == 5 && removeDuplicateCharacters(word) == word
+//       getValueOfWord(word, scrabbleValues) == 5 && removeDuplicateCharacters(word) == word
 //   );
 //   const file = fs.createWriteStream("./res/initials.txt");
 //   filter.forEach(function (v) {
@@ -54,6 +55,7 @@ client.on("ready", () => {
 
     const delay = date - new Date().getTime();
     console.log(delay);
+    // justSolve(words, initials, channel);
 
     client.on("message", (message) => {
       //this event is fired, whenever the bot sees a new message
@@ -70,11 +72,6 @@ client.on("ready", () => {
     //   console.log(`words are ${words.length}`)
   });
 });
-const getValueOfWord = (word) => {
-  return word
-    .split("")
-    .reduce((accum, letter) => accum + scrabbleValues[letter.toLowerCase()], 0);
-};
 
 const removeDuplicateCharacters = (string) => {
   return string
@@ -111,4 +108,22 @@ function solveAndSend(words, initials, channel) {
     )}\n\nYou can find the words I tried below`
   );
   channel.send(`||${attempts.join("-")}||`);
+}
+
+function justSolve(words, initials) {
+  const [todayWord, number] = getSolutionForDate(new Date());
+  let guesser = new OfflineGuesser(todayWord);
+
+  const [solved, result, attempts] = solve(initials, words, guesser);
+
+  console.log(
+    `${
+      solved
+        ? "I was able to solve today's puzzle! 😀"
+        : "I wasn't able to solve today's puzzle 😥"
+    } \n\n Wordle ${number} ${result.length}/6 \n\n${result.join(
+      "\n"
+    )}\n\nYou can find the words I tried below`
+  );
+  console.log(`${attempts.join("-")}`);
 }
